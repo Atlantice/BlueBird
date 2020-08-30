@@ -1,57 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="shortcut icon"
-      type="image/png"
-      href="./asset/bluebird-logo.png"
-    />
-    <meta
-      name="BlueBird"
-      content="BlueBird lets you access your clusterduck network and visualise sensor data"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./style.css" />
 
-    <title>bluebird</title>
-  </head>
-  <body>
-    <header>
-      <div class="navbar">
-        <img src="./asset/bluebird-logo-big.svg" />
-        <div class="controls">
-          <button id="read-button">Connect</button>
-          <button id="start-button" disabled>Start</button>
-          <button id="stop-button" disabled>Stop</button>
+<head>
+  
 
-          <form id="send-form">
-            <input id="input" type="text" placeholder="Data to send ..." />
-            <button id="send-button" type="submit-button">Send</button>
-          </form>
-        </div>
+  <!-- <script src="js/app.js"></script> -->
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" type="image/png" href="./asset/bluebird-logo.png" />
+  <meta name="BlueBird" content="BlueBird lets you access your clusterduck network and visualise sensor data" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+
+
+  <title>bluebird</title>
+</head>
+
+<body>
+  <pre id="display"></pre>
+  <header>
+    <div class="navbar">
+      <img src="./asset/bluebird-logo-big.svg" />
+      <div class="controls">
+        <button id="read-button">Connect</button>
+        <button id="start-button" disabled>Start</button>
+        <button id="stop-button" disabled>Stop</button>
+
+        <form id="send-form">
+          <input id="input" type="text" placeholder="Data to send ..." />
+          <button id="send-button" type="submit-button">Send</button>
+        </form>
       </div>
-    </header>
-    <main>
-      <div class="data-container">
-        <div class="dumy-data">
-          <h3>here goes data ..</h3>
-        </div>
-        <div class="dumy-data">
-          <h3>here goes data ..</h3>
-        </div>
-        <div class="dumy-data">
-          <h3>here goes data ..</h3>
-        </div>
-        <div class="dumy-data">
-          <h3>here goes data ..</h3>
-        </div>
+    </div>
+  </header>
+  <main>
+    <div class="data-container">
+      <div class="dash">
+        <p>dashbird</p>
       </div>
-    </main>
-    <script type="text/javascript" src="./app.js"></script>
-  </body>
+
+      <div class="workspace">
+        <p>public playground</p>
+      </div>
+
+      <div class="summary-container">
+        <p id="summary-title">live incoming data</p>
+        <p id="bird-payload">Data</p>
+      </div>
+
+      <ul id="data-list">
+        <li>Test</li>
+      </ul>
+
+      
+
+
+      <div class="dumy-data">
+
+        <h3>here goes data ..</h3>
+      </div>
+      <div class="dumy-data">
+        <h3>here goes data ..</h3>
+        <h1>here goes data ..</h1>
+
+      </div>
+      <div class="dumy-data">
+        <h3>here goes data ..</h3>
+      </div>
+      <div class="dumy-data">
+        <h3>here goes data ..</h3>
+      </div>
+
+      <div class="nav_container"></div>
+
+    </div>
+  </main>
+  <footer id="footer">
+    <span id="todo-count"></span>
+    <div id="sync-wrapper">
+      <div id="sync-success">Currently syncing</div>
+      <div id="sync-error">There was a problem syncing</div>
+    </div>
+  </footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/pouchdb@7.2.1/dist/pouchdb.min.js"></script>
+  <script type="text/javascript" src="./app.js"></script>
+</body>
+
 </html>

@@ -153,6 +153,8 @@ input[type="search"] {
   color: #715ee4;
 }
 
+
+
 .data-container {
   position: absolute;
   z-index: 2;
@@ -172,6 +174,104 @@ input[type="search"] {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 25px;
+  color: #715ee4;
+}
+
+.dash {
+  position: absolute;
+width: 221px;
+height: 25px;
+left: 46px;
+top: 53px;
+
+font-family: Poppins;
+font-style: normal;
+font-weight: 600;
+font-size: 30px;
+line-height: 25px;
+/* identical to box height, or 52% */
+
+
+color: #715EE4;
+
+}
+
+.workspace {
+  position: absolute;
+width: 225px;
+height: 25px;
+left: 46px;
+top: 97px;
+
+font-family: Poppins;
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 25px;
+/* identical to box height, or 104% */
+
+
+color: #000000;
+}
+
+.summary-container {
+  /* Rectangle 16 */
+
+
+position: absolute;
+width: 215px;
+height: 100px;
+left: 45px;
+top: 140px;
+
+background: #F4F3F3;
+border-radius: 10px;
+}
+
+#summary-title {
+  position: absolute;
+width: 114px;
+height: 26px;
+left: 51px;
+top: 15px;
+
+font-family: Poppins;
+font-style: normal;
+font-weight: 600;
+font-size: 12px;
+line-height: 25px;
+/* or 208% */
+
+
+color: #000000;
+}
+
+#bird-payload {
+  /* Data */
+
+
+position: absolute;
+width: 114px;
+height: 26px;
+left: 51px;
+top: 48px;
+
+font-family: Poppins;
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 25px;
+/* or 69% */
+
+text-align: center;
+
+color: #3D21EA;
+
 }
 
 .dumy-data {

@@ -1,5 +1,86 @@
-var deviceName = "ESP32";
-// var deviceName = 'UART Service';
+// PouchDB
+// EDITING STARTS HERE (you dont need to edit anything above this line)
+// https://pouchdb.com/getting-started.html
+
+// 👇 SETUP LOCAL AND REMOTE DB 👇 
+//  🐦 Define DB here
+var db = new PouchDB('bluebirdDB');
+
+db.info().then(function (info) {
+  document.getElementById('display').innerHTML = 'We have a database: ' + JSON.stringify(info);
+});
+var remoteCouch = false;
+// var remoteCouch = 'http://localhost:5984/bluebird'
+// http://127.0.0.1:5984/_utils/#
+
+// 🐦 If remoteCouch defined sync
+if (remoteCouch) {
+  sync();
+}
+
+
+// 👇 SETUP SYNC 👇 
+// 🐦 sync - replicate to or from remote DB to local
+function sync() {
+  syncDom.setAttribute('data-sync-state', 'syncing');
+  var opts = {
+    live: true
+  };
+  db.replicate.to(remoteCouch, opts, syncError);
+  db.replicate.from(remoteCouch, opts, syncError);
+}
+
+var syncDom = document.getElementById('sync-wrapper');
+
+// There was some form or error syncing
+function syncError() {
+  syncDom.setAttribute('data-sync-state', 'error');
+}
+
+
+
+// 🐦  If new changes made to DB, display
+db.changes({
+  since: 'now',
+  live: true
+}).on('change', showPayload);
+
+
+// 👇 SAVE TO DB 👇 
+// 🐦 addPayload - adds incoming data from BLE Device to PouchDB
+// called in handleChangedValue()
+function addPayload(data) {
+  // bluebirdPayload - doc/row in DB
+  var bluebirdPayload = {
+    _id: new Date().toISOString(),
+    title: data,
+  };
+
+  db.put(bluebirdPayload, function callback(err, result) {
+    if (!err) {
+      console.log('Successfully added payload to DB!');
+      document.getElementById('display').innerHTML = 'Successfully added payload to DB: ' + JSON.stringify(bluebirdPayload);
+    }
+  });
+}
+
+
+// 🐦 showPayload - Shows Payload
+// For now shows the payload via Console
+// Comment console.log if it's distracting
+function showPayload() {
+  db.allDocs({
+    include_docs: true,
+    descending: true
+  }, function (err, doc) {
+    console.log(doc.rows)
+  });
+}
+
+
+// 👇 BLUETOOTH 👇 
+// BlueTooth
+var deviceName = "BlueBird";
 // var bleService = 'battery_service'
 
 // same as SERVICE_UUID in arduino
@@ -56,11 +137,9 @@ function isWebBluetoothEnabled() {
 function getDeviceInfo() {
   let options = {
     optionalServices: [bleService],
-    filters: [
-      {
-        name: deviceName,
-      },
-    ],
+    filters: [{
+      name: deviceName,
+    }, ],
   };
 
   console.log("Requesting any Bluetooth Device...");
@@ -78,7 +157,7 @@ function read() {
   return (bluetoothDeviceDetected ? Promise.resolve() : getDeviceInfo())
     .then(connectGATT)
     .then((_) => {
-      console.log("Reading UV Index...");
+      console.log("Reading Bird Data...");
       return gattCharacteristic.readValue();
     })
     .catch((error) => {
@@ -118,29 +197,21 @@ function Decodeuint8arr(uint8array) {
   return new TextDecoder("utf-8").decode(uint8array);
 }
 
-// function handleChangedValue(value) {
 function handleChangedValue(event) {
-  // let value = event.target.value.getUint8(0)
-  // var uint8 = new Uint8Array(30);
-  // uint8[0] = value;
-  // var now = new Date()
-  // console.log('> ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds() + ' string input is ' + Decodeuint8arr(uint8))
 
   let value = event.target.value;
-  console.log(Decodeuint8arr(value));
 
-  // value -> object
-  // event.target.value -> arraybuffer
-  // let decoder = new TextDecoder("uft-8");
-  // console.log(decoder.decode(value));
+  let payload = Decodeuint8arr(value);
 
-  // let value = new TextDecoder().decode(event.target.value);
-  // console.log(value, 'in');
+  //  🐦 save to DB
+  addPayload(payload);
+  document.getElementById("bird-payload").innerHTML = payload;
+
+  console.log(payload);
 }
 
 function send(data) {
-  data = String(data);
-  {
+  data = String(data); {
     {
       /* gattCharacteristic = '6E400002-B5A3-F393-E0A9-E50E24DCCA9E'; */
     }
@@ -157,37 +228,6 @@ function send(data) {
 function writeToCharacteristic(characteristic, data) {
   characteristic.writeValue(new TextEncoder().encode(data));
 }
-
-// function send(data) {
-//     data = String(data);
-
-//     if (!data || !gattCharacteristic) {
-//         return;
-//     }
-
-//     data += '\n'
-//     if (data.length > 20) {
-//         let chunks = data.match(/(.|[/r/n])){1,20}/g);
-
-//         writeToCharacteristic(gattCharacteristic, chunks[0]); // writing chunk[0] to characteristicCache
-
-//         // for message longer than 20bytes
-//         for (let i = 1; i < chunks.length; i++) {
-//             setTimeout(() => {
-//                 writeToCharacteristic(gattCharacteristic, chunks[i]);
-//             }, i * 100);
-//         }
-
-//     } else {
-//         writeToCharacteristic(gattCharacteristic, data);
-//     }
-
-//     console.log(data, 'out');
-// }
-
-// function writeToCharacteristic(characteristic, data) {
-//     characteristic.writeValue(new TextEncoder().encode(data));
-// }
 
 function start() {
   gattCharacteristic
